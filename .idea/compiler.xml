@@ -2,7 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for tresorerie" enabled="true">
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="constante" />
+      </profile>
+      <profile name="Annotation profile for crm" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -14,22 +21,17 @@
         </processorPath>
         <module name="transaction-service" />
         <module name="utilisateur-service" />
-        <module name="fileupload-service" />
         <module name="documentcommercial-service" />
-        <module name="compte-service" />
+        <module name="fileupload-service" />
         <module name="entite-service" />
         <module name="notification-service" />
-      </profile>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="constante-service" />
+        <module name="compte-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="backend" options="-parameters" />
       <module name="compte-service" options="-parameters" />
       <module name="documentcommercial-service" options="-parameters" />
       <module name="entite-service" options="-parameters" />

@@ -6,12 +6,15 @@ import com.kodzotech.entite.dto.EntiteResponse;
 import com.kodzotech.entite.service.EntiteChartService;
 import com.kodzotech.entite.service.EntiteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/entites")
 @RequiredArgsConstructor
 public class EntiteController {
@@ -21,14 +24,14 @@ public class EntiteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody EntiteDto entiteDto) {
+    public void save(@RequestBody @Valid EntiteDto entiteDto) {
         entiteService.save(entiteDto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable Long id,
-                       @RequestBody EntiteDto entiteDto) {
+                       @RequestBody @Valid EntiteDto entiteDto) {
         entiteDto.setId(id);
         entiteService.save(entiteDto);
     }

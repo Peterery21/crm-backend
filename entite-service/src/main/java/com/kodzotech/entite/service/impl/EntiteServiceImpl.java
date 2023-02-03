@@ -4,8 +4,8 @@ import com.kodzotech.entite.client.AdresseClient;
 import com.kodzotech.entite.dto.AdresseDto;
 import com.kodzotech.entite.dto.EntiteDto;
 import com.kodzotech.entite.dto.EntiteResponse;
-import com.kodzotech.entite.mapper.EntiteMapper;
 import com.kodzotech.entite.model.Entite;
+import com.kodzotech.entite.service.EntiteMapperService;
 import com.kodzotech.entite.service.EntiteService;
 import com.kodzotech.entite.exception.EntiteException;
 import com.kodzotech.entite.repository.EntiteRepository;
@@ -21,14 +21,14 @@ import java.util.List;
 public class EntiteServiceImpl implements EntiteService {
 
     private final EntiteRepository entiteRepository;
-    private final EntiteMapper entiteMapper;
+    private final EntiteMapperService entiteMapperService;
     private final AdresseClient adresseClient;
 
     @Override
     @Transactional
     public void save(EntiteDto entiteDto) {
         Validate.notNull(entiteDto);
-        Entite entite = entiteMapper.dtoToEntity(entiteDto);
+        Entite entite = entiteMapperService.dtoToEntity(entiteDto);
         Entite parent = null;
         int niveau = 0;
         if (entiteDto.getParentId() != null) {
@@ -57,7 +57,7 @@ public class EntiteServiceImpl implements EntiteService {
         if (entite.getId() != null) {
             Entite entiteOriginal = entiteRepository
                     .findById(entite.getId()).get();
-            entiteOriginal = entiteMapper.dtoToEntity(entiteOriginal, entite);
+            entiteOriginal = entiteMapperService.dtoToEntity(entiteOriginal, entite);
             entiteRepository.save(entiteOriginal);
         } else {
             entiteRepository.save(entite);
@@ -75,8 +75,10 @@ public class EntiteServiceImpl implements EntiteService {
         if (entite.getSocieteId() == null) {
             throw new EntiteException("erreur.entite.societeId.null");
         } else {
-            //vérification si la société existe
+            //TODO vérification si la société existe
+
         }
+
         if (entite.getId() != null) {
             // Mode modification
             //Rechercher l'entite de la base
@@ -112,14 +114,16 @@ public class EntiteServiceImpl implements EntiteService {
         Entite entite = entiteRepository.findById(id)
                 .orElseThrow(() -> new EntiteException(
                         "erreur.entite.id.non.trouve"));
-        return entiteMapper.entityToDto(entite);
+        EntiteDto entiteDto =  entiteMapperService.entityToDto(entite);
+        entiteDto.setAdresse(adresseClient.getAdresse(entite.getAdresseId()));
+        return entiteDto;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<EntiteResponse> getAllEntitesBySociete(Long idSociete) {
         List<Entite> entiteList = entiteRepository.findAllBySocieteId(idSociete);
-        return entiteMapper.entityToResponse(entiteList);
+        return entiteMapperService.entityToResponse(entiteList);
     }
 
     @Override

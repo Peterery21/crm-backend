@@ -4,8 +4,8 @@ import com.kodzotech.entite.client.AdresseClient;
 import com.kodzotech.entite.client.FileUploadClient;
 import com.kodzotech.entite.dto.AdresseDto;
 import com.kodzotech.entite.dto.SocieteDto;
-import com.kodzotech.entite.mapper.SocieteMapper;
 import com.kodzotech.entite.model.Societe;
+import com.kodzotech.entite.service.SocieteMapperService;
 import com.kodzotech.entite.service.SocieteService;
 import com.kodzotech.entite.exception.SocieteException;
 import com.kodzotech.entite.repository.SocieteRepository;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SocieteServiceImpl implements SocieteService {
 
     private final SocieteRepository societeRepository;
-    private final SocieteMapper societeMapper;
+    private final SocieteMapperService societeMapperService;
     private final AdresseClient adresseClient;
     private final FileUploadClient fileUploadClient;
 
@@ -29,7 +29,7 @@ public class SocieteServiceImpl implements SocieteService {
     @Transactional
     public void save(SocieteDto societeDto) {
         Validate.notNull(societeDto);
-        Societe societe = societeMapper.dtoToEntity(societeDto);
+        Societe societe = societeMapperService.dtoToEntity(societeDto);
         validerSociete(societe);
 
         AdresseDto adresseDto = societeDto.getAdresse();
@@ -47,7 +47,7 @@ public class SocieteServiceImpl implements SocieteService {
         if (societe.getId() != null) {
             Societe societeOriginal = societeRepository
                     .findById(societe.getId()).get();
-            societeOriginal = societeMapper.dtoToEntity(societeOriginal, societe);
+            societeOriginal = societeMapperService.dtoToEntity(societeOriginal, societe);
             //Save societe
             societeRepository.save(societeOriginal);
         } else {
@@ -79,7 +79,7 @@ public class SocieteServiceImpl implements SocieteService {
         Societe societe = societeRepository.findById(id)
                 .orElseThrow(() -> new SocieteException(
                         "erreur.societe.id.non.trouve"));
-        return societeMapper.entityToDto(societe);
+        return societeMapperService.entityToDto(societe);
     }
 
 }
