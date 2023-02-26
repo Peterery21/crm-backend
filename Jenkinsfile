@@ -3,6 +3,6 @@ node{
         checkout scm
     }
     stage('Run Script'){
-            sh 'chmod +x build-image.sh && ./build-image.sh'
+            sh 'chmod +x build-image-linux.sh && ./build-image-linux.sh'
     }
 }
