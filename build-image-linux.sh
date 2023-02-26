@@ -1,7 +1,8 @@
 #!/bin/bash
 for dir in */
 do
-  if ${dir} == *"service"*; then
   echo ${dir}
-  fi
+  cd ${dir}
+  docker buildx build "$dir" --platform linux/amd64 --push --tag="$containerName""$dir"
+  cd ..
 done
