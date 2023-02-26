@@ -26,21 +26,21 @@ public interface DocumentCommercialRepository extends JpaRepository<DocumentComm
                                                  TypeDocument type, EtatDocument etatDocument, Pageable pageable);
 
 
-    @Query("select new com.kodzotech.documentcommercialservice.dto.EtatCountDto(categorie, type, etat, count(*)) " +
+    @Query("select new com.kodzotech.documentcommercial.dto.EtatCountDto(categorie, type, etat, count(*)) " +
             "from DocumentCommercial " +
             "where categorie=:categorie and type=:type " +
             "and actif=true " +
             "group by categorie, type, etat")
     List<EtatCountDto> getEtatCountList(CategorieDocument categorie, TypeDocument type);
 
-    @Query("select new com.kodzotech.documentcommercialservice.dto.EtatCountDto(categorie, type, count(*)) " +
+    @Query("select new com.kodzotech.documentcommercial.dto.EtatCountDto(categorie, type, count(*)) " +
             "from DocumentCommercial " +
             "where categorie=:categorie and type=:type and compteId=:compteId " +
             "and actif=true " +
             "group by categorie, type")
     List<EtatCountDto> getClientTypeCountList(CategorieDocument categorie, TypeDocument type, Long compteId);
 
-    @Query("select new com.kodzotech.documentcommercialservice.dto.EtatCountDto(categorie, type, count(*)) " +
+    @Query("select new com.kodzotech.documentcommercial.dto.EtatCountDto(categorie, type, count(*)) " +
             "from DocumentCommercial where categorie=:categorie and type=:type " +
             "and actif=true " +
             "group by categorie, type")
@@ -54,7 +54,7 @@ public interface DocumentCommercialRepository extends JpaRepository<DocumentComm
 
     List<DocumentCommercial> findAllByDocumentInitialIdAndIdNot(Long documentInitialId, Long documentId);
 
-    @Query("select new com.kodzotech.documentcommercialservice.dto.ArticlePlusVenduDto(art.id, art.designation, " +
+    @Query("select new com.kodzotech.documentcommercial.dto.ArticlePlusVenduDto(art.id, art.designation, " +
             "sum((art.prixUnitaire * art.quantite)) as valeur) " +
             "from DocumentCommercial d " +
             "join d.articles art " +
@@ -70,7 +70,7 @@ public interface DocumentCommercialRepository extends JpaRepository<DocumentComm
                                                             List<EtatDocument> listEtatOk);
 
 
-    @Query("select new com.kodzotech.documentcommercialservice.dto.EvolutionVenteParDateDto(d.dateEmission, " +
+    @Query("select new com.kodzotech.documentcommercial.dto.EvolutionVenteParDateDto(d.dateEmission, " +
             "sum((art.prixUnitaire * art.quantite)) as valeur) " +
             "from DocumentCommercial d " +
             "join d.articles art " +

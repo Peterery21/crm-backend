@@ -27,8 +27,8 @@ public class EntiteChartServiceImpl implements EntiteChartService {
     private final EntiteRepository entiteRepository;
     private final EntiteMapperService entiteMapperService;
 
-    @Value("${chart.image}")
-    private String image;
+//    @Value("${chart.image}")
+//    private String image;
 
     @Override
     @Transactional(readOnly = true)
@@ -72,7 +72,7 @@ public class EntiteChartServiceImpl implements EntiteChartService {
                             .builder()
                             .id(entiteResponse.getId())
                             .name(entiteResponse.getNom())
-                            .image(getImage())
+                            //.image(getImage())
                             .build();
                     entiteCharts.add(getChartChild(entiteChart, entiteResponses));
                 });
@@ -109,7 +109,7 @@ public class EntiteChartServiceImpl implements EntiteChartService {
                         .builder()
                         .id(entiteResponse.getId())
                         .name(entiteResponse.getNom())
-                        .image(getImage())
+                        //.image(getImage())
                         .build())
                 .collect(Collectors.toList());
         if (childs != null && childs.size() > 0) {

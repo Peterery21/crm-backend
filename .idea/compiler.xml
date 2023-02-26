@@ -21,11 +21,11 @@
         </processorPath>
         <module name="transaction-service" />
         <module name="utilisateur-service" />
-        <module name="documentcommercial-service" />
         <module name="fileupload-service" />
+        <module name="documentcommercial-service" />
+        <module name="compte-service" />
         <module name="entite-service" />
         <module name="notification-service" />
-        <module name="compte-service" />
       </profile>
     </annotationProcessing>
   </component>

@@ -2,6 +2,7 @@ package com.kodzotech.transaction.service;
 
 import com.kodzotech.transaction.dto.DeviseDto;
 import com.kodzotech.transaction.model.Devise;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

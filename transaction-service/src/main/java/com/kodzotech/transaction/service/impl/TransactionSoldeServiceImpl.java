@@ -53,7 +53,8 @@ public class TransactionSoldeServiceImpl implements TransactionSoldeService {
 
     @Override
     public StatDto getStatTransaction() {
-        List<DeviseDto> deviseDtos = deviseService.getAllDevise();
+        List<DeviseDto> deviseDtos = deviseService.getDevisesById(transactionRepository
+                .findAllUsedDeviseByEntiteId());
         List<DeviseValeurDto> depenseTotal = new ArrayList<>();
         List<DeviseValeurDto> recetteTotal = new ArrayList<>();
         List<DeviseValeurDto> soldeTotal = new ArrayList<>();

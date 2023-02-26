@@ -2,6 +2,7 @@ package com.kodzotech.transaction.repository;
 
 import com.kodzotech.transaction.dto.rapport.TransactionCategorieDto;
 import com.kodzotech.transaction.dto.rapport.TransactionDetailDto;
+import com.kodzotech.transaction.model.Devise;
 import com.kodzotech.transaction.model.Transaction;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,7 +48,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT COALESCE(SUM(montant), 0) FROM Transaction WHERE supprime=0 AND  sens<0 and deviseId=:deviseId")
     Double totalDepense(Long deviseId);
 
-    @Query("SELECT new com.kodzotech.transactionservice.dto.rapport.TransactionCategorieDto( " +
+    @Query("SELECT new com.kodzotech.transaction.dto.rapport.TransactionCategorieDto( " +
             "categorieTransaction.id as id, categorieTransaction.libelle as categorie, " +
             "SUM(COALESCE(montant, 0)) as valeur) " +
             "FROM Transaction " +
@@ -57,7 +58,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "ORDER BY 3 DESC")
     List<TransactionCategorieDto> totalParCategorie(Long deviseId, int sens, LocalDate dateDebut, LocalDate dateFin);
 
-    @Query("SELECT new com.kodzotech.transactionservice.dto.rapport.TransactionDetailDto( " +
+    @Query("SELECT new com.kodzotech.transaction.dto.rapport.TransactionDetailDto( " +
             "dateTransaction, description, montant " +
             ") " +
             "FROM Transaction " +
@@ -108,4 +109,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findAllBySupprimeFalseAndEntiteId(Long societeId);
 
     List<Transaction> findAllBySupprimeFalseAndEntiteId(Long societeId, Pageable pageable);
+
+    @Query("SELECT DISTINCT t.deviseId FROM Transaction t")
+    List<Long> findAllUsedDeviseByEntiteId();
 }

@@ -3,6 +3,7 @@ package com.kodzotech.transaction.service;
 import com.kodzotech.transaction.dto.StatDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface TransactionSoldeService {
 

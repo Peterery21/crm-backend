@@ -1,6 +1,6 @@
 dirs=(*)
 SUB='service'
-containerName='kodzotech/tresosoft:'
+containerName='peterado/tresosoft:'
 for dir in "${dirs[@]}"
 do
   if [[ "$dir" == *"$SUB"* ]]; then

@@ -5,6 +5,7 @@ import com.kodzotech.entite.dto.AdresseDto;
 import com.kodzotech.entite.dto.EntiteDto;
 import com.kodzotech.entite.dto.EntiteResponse;
 import com.kodzotech.entite.model.Entite;
+import com.kodzotech.entite.repository.SocieteRepository;
 import com.kodzotech.entite.service.EntiteMapperService;
 import com.kodzotech.entite.service.EntiteService;
 import com.kodzotech.entite.exception.EntiteException;
@@ -23,16 +24,16 @@ public class EntiteServiceImpl implements EntiteService {
     private final EntiteRepository entiteRepository;
     private final EntiteMapperService entiteMapperService;
     private final AdresseClient adresseClient;
+    private final SocieteRepository societeRepository;
 
     @Override
     @Transactional
     public void save(EntiteDto entiteDto) {
         Validate.notNull(entiteDto);
         Entite entite = entiteMapperService.dtoToEntity(entiteDto);
-        Entite parent = null;
         int niveau = 0;
         if (entiteDto.getParentId() != null) {
-            parent = entiteRepository
+            Entite parent = entiteRepository
                     .findById(entiteDto.getParentId())
                     .orElseThrow(() ->
                             new EntiteException("erreur.entite.parent.non.trouve"));
@@ -42,18 +43,7 @@ public class EntiteServiceImpl implements EntiteService {
         }
         entite.setNiveau(niveau);
         validerEntite(entite);
-        AdresseDto adresseDto = entiteDto.getAdresse();
-        //Update adresse
-        Long adresseId = null;
-        Long adresseLivraisonId = null;
-        if (adresseDto != null) {
-            if (adresseDto.getId() != null) {
-                adresseId = adresseClient.update(adresseDto.getId(), adresseDto);
-            } else {
-                adresseId = adresseClient.save(adresseDto);
-            }
-            entite.setAdresseId(adresseId);
-        }
+        entite.setAdresseId(saveAdresse(entiteDto.getAdresse()));
         if (entite.getId() != null) {
             Entite entiteOriginal = entiteRepository
                     .findById(entite.getId()).get();
@@ -62,6 +52,19 @@ public class EntiteServiceImpl implements EntiteService {
         } else {
             entiteRepository.save(entite);
         }
+    }
+
+    private Long saveAdresse(AdresseDto adresseDto){
+        //Update adresse
+        Long adresseId = null;
+        if (adresseDto != null) {
+            if (adresseDto.getId() != null) {
+                adresseId = adresseClient.update(adresseDto.getId(), adresseDto);
+            } else {
+                adresseId = adresseClient.save(adresseDto);
+            }
+        }
+        return adresseId;
     }
 
     @Override
@@ -76,7 +79,9 @@ public class EntiteServiceImpl implements EntiteService {
             throw new EntiteException("erreur.entite.societeId.null");
         } else {
             //TODO vérification si la société existe
-
+            if (!societeRepository.existsById(entite.getSocieteId()))
+                    throw new EntiteException(
+                            "erreur.entite.societeId.null");
         }
 
         if (entite.getId() != null) {
@@ -84,8 +89,8 @@ public class EntiteServiceImpl implements EntiteService {
             //Rechercher l'entite de la base
             Entite entiteOriginal = entiteRepository
                     .findById(entite.getId())
-                    .orElseThrow(() ->
-                            new EntiteException("erreur.entite.id.non.trouve"));
+                    .orElseThrow(() -> new EntiteException(
+                                    "erreur.entite.id.non.trouve"));
 
             //Vérifier si libellé en double
             Entite entiteTemp = entiteRepository
@@ -130,8 +135,8 @@ public class EntiteServiceImpl implements EntiteService {
     @Transactional
     public void delete(Long id) {
         Entite entite = entiteRepository.findById(id)
-                .orElseThrow(
-                        () -> new EntiteException("erreur.entite.id.non.trouve"));
+                .orElseThrow(() -> new EntiteException(
+                                "erreur.entite.id.non.trouve"));
         entiteRepository.delete(entite);
     }
 }

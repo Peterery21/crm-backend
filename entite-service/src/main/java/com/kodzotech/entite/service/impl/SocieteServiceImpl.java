@@ -23,7 +23,6 @@ public class SocieteServiceImpl implements SocieteService {
     private final SocieteRepository societeRepository;
     private final SocieteMapperService societeMapperService;
     private final AdresseClient adresseClient;
-    private final FileUploadClient fileUploadClient;
 
     @Override
     @Transactional
@@ -34,16 +33,7 @@ public class SocieteServiceImpl implements SocieteService {
 
         AdresseDto adresseDto = societeDto.getAdresse();
         //Update adresse
-        Long adresseId = null;
-        Long adresseLivraisonId = null;
-        if (adresseDto != null) {
-            if (adresseDto.getId() != null) {
-                adresseId = adresseClient.update(adresseDto.getId(), adresseDto);
-            } else {
-                adresseId = adresseClient.save(adresseDto);
-            }
-            societe.setAdresseId(adresseId);
-        }
+            societe.setAdresseId(saveAdresse(adresseDto));
         if (societe.getId() != null) {
             Societe societeOriginal = societeRepository
                     .findById(societe.getId()).get();
@@ -54,6 +44,18 @@ public class SocieteServiceImpl implements SocieteService {
             //Save societe
             societeRepository.save(societe);
         }
+    }
+
+    private Long saveAdresse(AdresseDto adresseDto){
+        Long adresseId = null;
+        if (adresseDto != null) {
+            if (adresseDto.getId() != null) {
+                adresseId = adresseClient.update(adresseDto.getId(), adresseDto);
+            } else {
+                adresseId = adresseClient.save(adresseDto);
+            }
+        }
+        return adresseId;
     }
 
     @Override

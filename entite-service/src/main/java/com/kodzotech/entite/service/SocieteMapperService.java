@@ -5,7 +5,9 @@ import com.kodzotech.entite.dto.SocieteDto;
 import com.kodzotech.entite.mapper.SocieteMapper;
 import com.kodzotech.entite.model.Societe;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class SocieteMapperService {
 

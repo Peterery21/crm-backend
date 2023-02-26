@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SocieteMapper {
 
     public Societe dtoToEntity(SocieteDto societeDto);
