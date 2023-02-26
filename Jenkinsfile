@@ -3,11 +3,7 @@ node{
         checkout scm
     }
     stage('Run Script'){
-        steps {
-            script {
-                sh('cd relativePathToFolder && chmod +x build-image.sh && ./build-image.sh')
-            }
-        }
+        sh('cd relativePathToFolder && chmod +x build-image.sh && ./build-image.sh')
     }
     stage('build & push'){
         dir ('<your new directory>') {
