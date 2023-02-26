@@ -3,7 +3,7 @@ SUB='service';
 containerName='peterado/tresosoft:';
 for dir in *;
 do
-  if [[ -d "$dir" && "$dir" == *"$SUB"*]] ; then
+  if  -d "$dir" && "$dir" == *"$SUB"*  ; then
     echo "$dir"
     mvn clean install -f "$dir"
     docker stop "$dir"
