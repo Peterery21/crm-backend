@@ -3,7 +3,9 @@ node{
         checkout scm
     }
     stage('Run Script'){
-        sh 'chmod +x build-image.sh && ./build-image.sh'
+        dir ('${env.WORKSPACE}') {
+            sh 'chmod +x build-image.sh && ./build-image.sh'
+        }
     }
     stage('build & push'){
         dir ('${env.WORKSPACE}') {
