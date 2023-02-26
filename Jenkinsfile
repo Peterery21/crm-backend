@@ -3,10 +3,10 @@ node{
         checkout scm
     }
     stage('Run Script'){
-        sh('cd relativePathToFolder && chmod +x build-image.sh && ./build-image.sh')
+        sh 'chmod +x build-image.sh && ./build-image.sh'
     }
     stage('build & push'){
-        dir ('<your new directory>') {
+        dir ('${env.WORKSPACE}') {
             sh "chmod +x -R ${env.WORKSPACE}/../${env.JOB_NAME}@script"
             sh './build-image.sh'
         }
