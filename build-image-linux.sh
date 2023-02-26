@@ -1,9 +1,9 @@
 #!/bin/bash
 SUB='service';
 containerName='peterado/tresosoft:';
-for dir in */;
+for dir in *;
 do
-  if ["$dir" == *"$SUB"*] ; then
+  if [[ -d "$dir" && "$dir" == *"$SUB"*] ; then
     echo "$dir"
     mvn clean install -f "$dir"
     docker stop "$dir"
