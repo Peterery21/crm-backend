@@ -1,6 +1,6 @@
 SUB='service';
 containerName='peterado/tresosoft:';
-for dir in */;
+for dir in *;
 do
   if  "$dir" == *"$SUB"* ; then
     echo "$dir"
