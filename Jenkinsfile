@@ -3,13 +3,13 @@ node{
         checkout scm
     }
     stage('clean & install'){
-        mvn clean install -f compte-service
-        mvn clean install -f documentcommercial-service
-        mvn clean install -f entite-service
-        mvn clean install -f fileupload-service
-        mvn clean install -f notification-service
-        mvn clean install -f transaction-service
-        mvn clean install -f utilisateur-service
+        sh 'mvn clean install -f compte-service'
+        sh 'mvn clean install -f documentcommercial-service'
+        sh 'mvn clean install -f entite-service'
+        sh 'mvn clean install -f fileupload-service'
+        sh 'mvn clean install -f notification-service'
+        sh 'mvn clean install -f transaction-service'
+        sh 'mvn clean install -f utilisateur-service'
     }
     stage('stop container'){
             sh 'docker stop compte-service'
