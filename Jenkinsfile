@@ -14,7 +14,7 @@ node{
                 sh 'docker login -u peterado -p ${dockerhubpwd}'
             }
         }
-        stage('create images docker') {
+        stage('create images') {
             sh 'docker build entite-service -t peterado/tresosoft:entite-service'
             sh 'docker build compte-service -t peterado/tresosoft:compte-service'
             sh 'docker build documentcommercial-service -t peterado/tresosoft:documentcommercial-service'
