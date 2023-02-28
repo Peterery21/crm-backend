@@ -74,6 +74,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             String extension = StringUtils.getFilenameExtension(fileUploadDto.getFile().getOriginalFilename());
             String name = FilenameUtils.removeExtension(fileUploadDto.getFile().getOriginalFilename());
+            name = name.replaceAll(" ","");
             if (fileUploadDto.getFilename() == null) {
                 filename = name + "_" + String.valueOf(System.currentTimeMillis()) + "." + extension;
             } else {

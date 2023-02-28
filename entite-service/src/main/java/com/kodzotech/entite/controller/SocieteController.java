@@ -40,7 +40,7 @@ public class SocieteController {
         String baseUrl = request.getScheme() + "://";
         if (societeDto.getLogo() != null) {
             //TODO intérroger, fileupload-service pour récupérer le chemin complet
-            societeDto.setLogoUrl(baseUrl + apiGatewayUrl + "/fileupload-service/content/images/" + societeDto.getLogo());
+            societeDto.setLogoUrl(baseUrl + apiGatewayUrl + "/api/fileupload-service/content/images/" + societeDto.getLogo());
         }
         return societeDto;
     }
