@@ -1,17 +1,31 @@
 node{
     withMaven(maven:'maven') {
+        stage('clean workspace'){
+            cleanWs()
+        }
+        stage('Checkout') {
+            checkout scm
+        }
+        stage('build') {
+            sh 'mvn clean install'
+        }
+        stage('docker login') {
+            withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                sh 'docker login -u peterado -p ${dockerhubpwd}'
+            }
+        }
+        stage('create images docker') {
+            sh 'docker build entite-service -t peterado/tresosoft:entite-service'
+            sh 'docker build compte-service -t peterado/tresosoft:compte-service'
+            sh 'docker build documentcommercial-service -t peterado/tresosoft:documentcommercial-service'
+            sh 'docker build fileupload-service -t peterado/tresosoft:fileupload-service'
+            sh 'docker build notification-service -t peterado/tresosoft:notification-service'
+            sh 'docker build transaction-service -t peterado/tresosoft:transaction-service'
+            sh 'docker build utilisateur-service -t peterado/tresosoft:utilisateur-service'
+        }
+        stage('docker push') {
 
-            stage('Checkout') {
-                checkout scm
-            }
-            stage('Build compte-service') {
-                sh 'cd compte-service'
-                sh 'mvn clean install'
-                def dockerImage = docker.build("peterado/tresosoft:compte-service")
-                withDockerRegistry(credentialsId: 'peterado') {
-                    dockerImage.push()
-                }
-            }
+        }
     }
 //     stage('checkout'){
 //         checkout scm
