@@ -24,7 +24,13 @@ node{
             sh 'docker build utilisateur-service -t peterado/tresosoft:utilisateur-service'
         }
         stage('docker push') {
-
+            sh 'docker push peterado/tresosoft:entite-service'
+            sh 'docker push peterado/tresosoft:compte-service'
+            sh 'docker push peterado/tresosoft:documentcommercial-service'
+            sh 'docker push peterado/tresosoft:fileupload-service'
+            sh 'docker push peterado/tresosoft:notification-service'
+            sh 'docker push peterado/tresosoft:transaction-service'
+            sh 'docker push peterado/tresosoft:utilisateur-service'
         }
     }
 //     stage('checkout'){
