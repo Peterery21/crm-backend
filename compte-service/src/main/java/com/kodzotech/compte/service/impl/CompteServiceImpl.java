@@ -5,11 +5,11 @@ import com.kodzotech.compte.client.TransactionClient;
 import com.kodzotech.compte.dto.*;
 import com.kodzotech.compte.exception.CategorieCompteException;
 import com.kodzotech.compte.exception.CompteException;
-import com.kodzotech.compte.mapper.CompteMapper;
 import com.kodzotech.compte.model.Compte;
 import com.kodzotech.compte.model.CompteType;
 import com.kodzotech.compte.repository.CompteRepository;
 import com.kodzotech.compte.service.AdresseService;
+import com.kodzotech.compte.service.CompteMapperService;
 import com.kodzotech.compte.service.CompteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,7 @@ import java.util.List;
 public class CompteServiceImpl implements CompteService {
 
     private final CompteRepository compteRepository;
-    private final CompteMapper compteMapper;
+    private final CompteMapperService compteMapperService;
     private final AdresseService adresseService;
     private final ResponsableClient responsableClient;
     private final TransactionClient transactionClient;
@@ -34,7 +34,7 @@ public class CompteServiceImpl implements CompteService {
     @Override
     @Transactional
     public void save(CompteDto compteDto) {
-        Compte compte = compteMapper.dtoToEntity(compteDto);
+        Compte compte = compteMapperService.dtoToEntity(compteDto);
         validerCompte(compte);
 
         AdresseDto adresseDto = compteDto.getAdresse();
@@ -61,7 +61,7 @@ public class CompteServiceImpl implements CompteService {
         if (compte.getId() != null) {
             Compte compteOriginal = compteRepository
                     .findById(compte.getId()).get();
-            compteOriginal = compteMapper.dtoToEntity(compteOriginal, compte);
+            compteOriginal = compteMapperService.dtoToEntity(compteOriginal, compte);
             //Save compte
             compteRepository.save(compteOriginal);
         } else {
@@ -127,7 +127,7 @@ public class CompteServiceImpl implements CompteService {
         Compte compte = compteRepository.findById(id)
                 .orElseThrow(() -> new CompteException(
                         "erreur.compte.id.non.trouve"));
-        return compteMapper.entityToDto(compte);
+        return compteMapperService.entityToDto(compte);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class CompteServiceImpl implements CompteService {
         Compte compte = compteRepository.findById(id)
                 .orElseThrow(() -> new CompteException(
                         "erreur.compte.id.non.trouve"));
-        return compteMapper.entitiesToResponse(Arrays.asList(compte)).get(0);
+        return compteMapperService.entitiesToResponse(Arrays.asList(compte)).get(0);
     }
 
     @Override
@@ -145,41 +145,41 @@ public class CompteServiceImpl implements CompteService {
         Pageable sortedByDateDesc =
                 PageRequest.of(page, size, Sort.by("raisonSociale").ascending());
         List<Compte> compteList = compteRepository.findAll(sortedByDateDesc).toList();
-        return compteMapper.entitiesToResponse(compteList);
+        return compteMapperService.entitiesToResponse(compteList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompteResponse> getAllCompte() {
         List<Compte> compteList = compteRepository.findAll();
-        return compteMapper.entitiesToResponse(compteList);
+        return compteMapperService.entitiesToResponse(compteList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompteResponse> getAllClient() {
         List<Compte> compteList = compteRepository.findAllByType(CompteType.CLIENT);
-        return compteMapper.entitiesToResponse(compteList);
+        return compteMapperService.entitiesToResponse(compteList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompteResponse> getAllProspect() {
         List<Compte> compteList = compteRepository.findAllByType(CompteType.PROSPECT);
-        return compteMapper.entitiesToResponse(compteList);
+        return compteMapperService.entitiesToResponse(compteList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompteResponse> getAllFournisseur() {
         List<Compte> compteList = compteRepository.findAllByType(CompteType.FOURNISSEUR);
-        return compteMapper.entitiesToResponse(compteList);
+        return compteMapperService.entitiesToResponse(compteList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompteDto> getComptesById(List<Long> ids) {
-        return compteMapper.entitiesToDto(compteRepository.findAllByIdIn(ids));
+        return compteMapperService.entitiesToDto(compteRepository.findAllByIdIn(ids));
     }
 
     @Override

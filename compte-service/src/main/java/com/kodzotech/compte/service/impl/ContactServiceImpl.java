@@ -3,10 +3,10 @@ package com.kodzotech.compte.service.impl;
 import com.kodzotech.compte.client.ResponsableClient;
 import com.kodzotech.compte.dto.*;
 import com.kodzotech.compte.exception.ContactException;
-import com.kodzotech.compte.mapper.ContactMapper;
 import com.kodzotech.compte.model.Contact;
 import com.kodzotech.compte.repository.ContactRepository;
 import com.kodzotech.compte.service.CompteService;
+import com.kodzotech.compte.service.ContactMapperService;
 import com.kodzotech.compte.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-    private final ContactMapper contactMapper;
+    private final ContactMapperService contactMapperService;
     private final CompteService compteService;
     private final ResponsableClient responsableClient;
 
@@ -34,12 +34,12 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public void save(ContactDto contactDto) {
         Validate.notNull(contactDto);
-        Contact contact = contactMapper.dtoToEntity(contactDto);
+        Contact contact = contactMapperService.dtoToEntity(contactDto);
         validerContact(contact);
         if (contact.getId() != null) {
             Contact contactOriginal = contactRepository
                     .findById(contact.getId()).get();
-            contactOriginal = contactMapper.dtoToEntity(contactOriginal, contact);
+            contactOriginal = contactMapperService.dtoToEntity(contactOriginal, contact);
             contactRepository.save(contactOriginal);
         } else {
             contactRepository.save(contact);
@@ -94,35 +94,35 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new ContactException(
                         "erreur.contact.id.non.trouve"));
-        return contactMapper.entityToDto(contact);
+        return contactMapperService.entityToDto(contact);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ContactResponse> getAllContact() {
         List<Contact> contactList = contactRepository.findAll();
-        return contactMapper.entityToResponse(contactList);
+        return contactMapperService.entityToResponse(contactList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ContactResponse> getAllContactParCompte(Long idCompte) {
         List<Contact> contactList = contactRepository.findAllByCompteId(idCompte);
-        return contactMapper.entityToResponse(contactList);
+        return contactMapperService.entityToResponse(contactList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ContactResponse> getAllContactParResponsable(Long idResponsable) {
         List<Contact> contactList = contactRepository.findAllByResponsableId(idResponsable);
-        return contactMapper.entityToResponse(contactList);
+        return contactMapperService.entityToResponse(contactList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ContactResponse> getAllContactNonAssigne() {
         List<Contact> contactList = contactRepository.findAllByResponsableIdIsNull();
-        return contactMapper.entityToResponse(contactList);
+        return contactMapperService.entityToResponse(contactList);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ContactServiceImpl implements ContactService {
         Pageable sortedByDateDesc =
                 PageRequest.of(page, size, Sort.by("nom").ascending());
         List<Contact> contactList = contactRepository.findAll(sortedByDateDesc).toList();
-        return contactMapper.entityToResponse(contactList);
+        return contactMapperService.entityToResponse(contactList);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDto> getContactsById(List<Long> ids) {
         return contactRepository.findAllById(ids)
                 .stream()
-                .map(contactMapper::entityToDto)
+                .map(contactMapperService::entityToDto)
                 .collect(Collectors.toList());
     }
 

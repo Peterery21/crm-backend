@@ -54,17 +54,17 @@ public interface DocumentCommercialRepository extends JpaRepository<DocumentComm
 
     List<DocumentCommercial> findAllByDocumentInitialIdAndIdNot(Long documentInitialId, Long documentId);
 
-    @Query("select new com.kodzotech.documentcommercial.dto.ArticlePlusVenduDto(art.id, art.designation, " +
+    @Query("select new com.kodzotech.documentcommercial.dto.ArticlePlusVenduDto(art.articleId, art.designation, " +
             "sum((art.prixUnitaire * art.quantite)) as valeur) " +
             "from DocumentCommercial d " +
-            "join d.articles art " +
+            "inner join d.articles art " +
             "WHERE d.deviseId=:deviseId " +
             "AND (d.dateEmission<=:dateFin AND d.dateEmission>=:dateDebut) " +
             "AND d.categorie=:categorie " +
             "AND d.type=:type " +
             "AND d.etat in :listEtatOk " +
-            "group by art.id, art.designation " +
-            "order by 2 DESC ")
+            "group by art.articleId, art.designation " +
+            "order by 3 DESC ")
     List<ArticlePlusVenduDto> getArticlePlusVenduParPeriode(Long deviseId, LocalDate dateDebut, LocalDate dateFin,
                                                             CategorieDocument categorie, TypeDocument type,
                                                             List<EtatDocument> listEtatOk);

@@ -1,4 +1,5 @@
 # Use root/example as user/password credentials
+
 version: '3.9'
 
 services:
@@ -17,32 +18,32 @@ services:
       - mysql:/var/lib/mysql
 
   discovery-server:
-    image: kodzotech/tresosoft:discovery-server
+    image: peterado/tresosoft:discovery-server
     container_name: discovery-server
     ports:
       - '8762:8762'
 
   api-gateway:
-    image: kodzotech/tresosoft:api-gateway
+    image: peterado/tresosoft:api-gateway
     container_name: api-gateway
     environment:
       - eureka.client.service-url.defaultZone=http://discovery-server:8762/eureka/
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - discovery-server
     ports:
       - '8084:8084'
 
   configuration-server:
-    image: kodzotech/tresosoft:configuration-server
+    image: peterado/tresosoft:configuration-server
     container_name: configuration-server
     environment:
       - spring.cloud.config.server.git.uri=https://github.com/Peterery21/config-tresorerie.git
-      - spring.cloud.config.server.git.username=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
+      - spring.cloud.config.server.git.username=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
       - spring.cloud.config.server.git.password=
       - eureka.client.service-url.defaultZone=http://discovery-server:8762/eureka/
       - spring.datasource.url=jdbc:mysql://mysqldb:3307/erp
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - discovery-server
       - mysqldb
@@ -50,73 +51,73 @@ services:
   #      - '8888:8888'
 
   utilisateur-service:
-    image: kodzotech/tresosoft:utilisateur-service
+    image: peterado/tresosoft:utilisateur-service
     container_name: utilisateur-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
       - mysqldb
 
   entite-service:
-    image: kodzotech/tresosoft:entite-service
+    image: peterado/tresosoft:entite-service
     container_name: entite-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
 
   compte-service:
-    image: kodzotech/tresosoft:compte-service
+    image: peterado/tresosoft:compte-service
     container_name: compte-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
 
   documentcommercial-service:
-    image: kodzotech/tresosoft:documentcommercial-service
+    image: peterado/tresosoft:documentcommercial-service
     container_name: documentcommercial-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
 
   transaction-service:
-    image: kodzotech/tresosoft:transaction-service
+    image: peterado/tresosoft:transaction-service
     container_name: transaction-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
 
   fileupload-service:
-    image: kodzotech/tresosoft:fileupload-service
+    image: peterado/tresosoft:fileupload-service
     container_name: fileupload-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
     volumes:
       - .upload:/upload
 
   notification-service:
-    image: kodzotech/tresosoft:notification-service
+    image: peterado/tresosoft:notification-service
     container_name: notification-service
     environment:
       - spring.cloud.config.uri=http://configuration-server:8888
-      - JAVA_OPTS=-Xms300M -Xmx300M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm
+      - JAVA_OPTS=-XX:MaxRAM=350m
     depends_on:
       - configuration-server
 
   angular:
-    image: kodzotech/tresosoft:angular
+    image: peterado/tresosoft:angular
     container_name: angular
     ports:
       - '9111:80'
