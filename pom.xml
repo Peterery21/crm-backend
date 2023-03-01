@@ -23,7 +23,6 @@
         <module>entite-service</module>
         <module>fileupload-service</module>
         <module>documentcommercial-service</module>
-        <module>constante</module>
         <module>notification-service</module>
     </modules>
 
