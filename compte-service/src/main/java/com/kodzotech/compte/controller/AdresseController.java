@@ -34,12 +34,6 @@ public class AdresseController {
     public AdresseDto getAdresse(@PathVariable Long id) {
         return adresseService.getAdresse(id);
     }
-//
-//    @GetMapping()
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<AdresseDto> getAllAdresse() {
-//        return adresseService.getAllAdresses();
-//    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
