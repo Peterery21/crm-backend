@@ -37,10 +37,10 @@ public class SocieteController {
     @ResponseStatus(HttpStatus.OK)
     public SocieteDto getSociete(@PathVariable Long id, HttpServletRequest request) {
         SocieteDto societeDto = societeService.getSociete(id);
-        String baseUrl = request.getScheme() + "://";
+        String baseUrl = request.getHeader("origin");
         if (societeDto.getLogo() != null) {
             //TODO intérroger, fileupload-service pour récupérer le chemin complet
-            societeDto.setLogoUrl(baseUrl + apiGatewayUrl + "/fileupload-service/content/images/" + societeDto.getLogo());
+            societeDto.setLogoUrl(baseUrl + "/api/fileupload-service/content/images/" + societeDto.getLogo());
         }
         return societeDto;
     }
